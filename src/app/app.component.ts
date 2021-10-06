@@ -20,6 +20,9 @@ export class AppComponent {
   // @ViewChild('tableDom2') tableDom!: ElementRef;
 
 
+
+
+
   constructor() { }
 
 
@@ -44,7 +47,7 @@ export class AppComponent {
 
       start_row = i + 1;
       end_row = start_row;
-      console.log(`tr start_row=${start_row} , end_row=${end_row}`);
+      // console.log(`tr start_row=${start_row} , end_row=${end_row}`);
 
       if (table_arr[i] === undefined) {
         table_arr.push([]);
@@ -144,12 +147,12 @@ export class AppComponent {
 
           // const target_call = j + cell.colSpan - 1;
           const target_call = start_cell - 1 + cell.colSpan - 1;
-          console.log(`target_call=${target_call}`);
+          // console.log(`target_call=${target_call}`);
 
           for (let k = start_cell; k <= target_call; k++) {
             table_arr[i][k] = -1;
 
-            console.log(`text=${text} , i=${i} , k=${k}`);
+            // console.log(`text=${text} , i=${i} , k=${k}`);
 
 
             if (cell.rowSpan > 1) {
@@ -195,32 +198,15 @@ export class AppComponent {
         }
 
         if (cell.rowSpan > 1) {
-          console.log(`cell.rowSpan=${cell.rowSpan} , start_row=${start_row} , end_row=${end_row}`);
+          // console.log(`cell.rowSpan=${cell.rowSpan} , start_row=${start_row} , end_row=${end_row}`);
           end_row = end_row + cell.rowSpan - 1;
         }
 
         // 合併儲存格
         if (cell.colSpan > 1 || cell.rowSpan > 1) {
-          console.log(`start_row=${start_row}, start_cell=${start_cell}, end_row=${end_row}, end_cell=${end_cell}`);
+          // console.log(`start_row=${start_row}, start_cell=${start_cell}, end_row=${end_row}, end_cell=${end_cell}`);
           worksheet.mergeCells(start_row, start_cell, end_row, end_cell);
         }
-
-
-
-        // if (cell.rowSpan > 1) {
-
-        // const target_row = j + cell.rowSpan - 1;
-
-        // for (let k = j; k < target_row; k++) {
-        //   if (table_arr[i] === undefined) {
-        //     table_arr.push([]);
-        //     table_arr[k].push(1);
-        //   }
-        // }
-
-
-
-
 
 
 
@@ -243,6 +229,25 @@ export class AppComponent {
 
 
         worksheet.getCell(start_row, start_cell).value = text;
+
+
+
+
+        // style
+        // console.log(getComputedStyle(cell).backgroundColor, this.rgbaString2Hexargb(getComputedStyle(cell).backgroundColor));
+        // console.log(cell, cell.style);
+        // console.log(cell.style.backgroundColor.toString());
+        let fbColor: string = this.rgbaString2Hexargb(getComputedStyle(cell).backgroundColor);
+        fbColor = fbColor.length === 0 ? 'ffffff' : fbColor;
+
+        worksheet.getCell(start_row, start_cell).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: `${fbColor}` },
+          bgColor: { argb: `ffffffff` }
+        };
+
+
 
         // 設定下一個開始欄位
         end_cell++;
@@ -280,7 +285,7 @@ export class AppComponent {
     // };
 
 
-    worksheet.getColumn(2).numFmt = '#,##0.00;[Red]\-#,##0.00';
+    // worksheet.getColumn(2).numFmt = '#,##0.00;[Red]\-#,##0.00';
 
 
     workbook.xlsx.writeBuffer().then((buffer) => {
@@ -292,5 +297,42 @@ export class AppComponent {
 
 
   }
+
+
+
+
+  rgbaString2Hexargb(str: string): string {
+    // str=
+    // rgb(200,210,238)
+    // rgba(0,0,0,0)
+
+    str = str.replace(/ /g, '');
+    // const regex = /(\d+),(\d+),(\d+)/;
+    const regex = /(\d+),(\d+),(\d+),?(\d)?/;
+    let m;
+
+    if ((m = regex.exec(str)) !== null) {
+
+      if (m[4] !== undefined && Number(m[4]) === 0) {
+        return 'ffffffff';
+      }
+
+      return '00' + this.rgb2hex(Number(m[1]), Number(m[2]), Number(m[3]));
+    }
+
+    return '';
+  }
+
+
+
+  rgb2hex(r: number, g: number, b: number): string {
+    var rgb = (r << 16) | (g << 8) | b
+    // return '#' + rgb.toString(16) // #80c0
+    // return '#' + (0x1000000 + rgb).toString(16).slice(1) // #0080c0
+    // or use [padStart](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart)
+    return rgb.toString(16).padStart(6, '0');
+  }
+
+
 
 }
