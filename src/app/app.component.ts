@@ -255,6 +255,17 @@ export class AppComponent {
         };
 
 
+        // font
+        console.log(getComputedStyle(cell).font);
+
+        worksheet.getCell(start_row, start_cell).font = {
+          // name: ,
+          color: { argb: this.rgbaString2Hexargb(getComputedStyle(cell).color) },
+          // family: getComputedStyle(cell).fontFamily,
+          size: Number(getComputedStyle(cell).fontSize.replace(/[^\d+]./g, '')),
+          // italic: true
+        };
+
 
 
         // 設定下一個開始欄位
