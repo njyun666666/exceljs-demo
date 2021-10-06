@@ -46,13 +46,56 @@
 
     <br>
 
-    <button type="button" (click)="excel()">excel</button>
+    <button type="button" (click)="excel(tableDom)">excel</button>
+
+    <br><br><br>
+
+
+    <table #tableDom2>
+        <tr>
+            <td colspan="2" rowspan="2">A</td>
+            <td colspan="2" rowspan="2">B</td>
+            <td colspan="2">C</td>
+        </tr>
+        <tr>
+            <td colspan="2">cc</td>
+        </tr>
+        <tr>
+            <td>A-1</td>
+            <td>A-2</td>
+            <td>B-1</td>
+            <td>B-2</td>
+            <td>C-1</td>
+            <td>C-2</td>
+        </tr>
+        <tr>
+            <td>A-1</td>
+            <td>A-2</td>
+            <td>B-1</td>
+            <td>B-2</td>
+            <td>C-1</td>
+            <td>C-2</td>
+        </tr>
+        <tr>
+            <td>A-1</td>
+            <td>A-2</td>
+            <td>B-1</td>
+            <td>B-2</td>
+            <td>C-1</td>
+            <td>C-2</td>
+        </tr>
+        <tr>
+            <td colspan="6">footer</td>
+        </tr>
+    </table>
+
+
 
     <br>
 
+    <button type="button" (click)="excel(tableDom2)">excel</button>
 
-
-
+    <br><br><br>
 
 
 </div>

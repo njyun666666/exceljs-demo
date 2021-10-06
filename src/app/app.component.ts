@@ -17,26 +17,26 @@ export class AppComponent {
     { string: 'ccc', number: -3000, date: '2021-01-03 13:00' },
   ];
 
-  @ViewChild('tableDom') tableDom!: ElementRef;
+  // @ViewChild('tableDom2') tableDom!: ElementRef;
 
 
   constructor() { }
 
 
 
-  excel() {
+  excel(table: HTMLTableElement) {
+
+    console.log(table);
+    // const table = tableDOM.nativeElement as HTMLTableElement;
 
     const workbook = new Excel.Workbook();
     const worksheet = workbook.addWorksheet('Sheet1');
     // let columns: Partial<Excel.Column>[] = [];
 
 
-    console.log(this.tableDom);
-
-    const table = this.tableDom.nativeElement as HTMLTableElement;
     let start_row: number = 1;
     let end_row: number = 1;
-    let rowspan: number = 1;
+
     const table_arr: Array<Array<number>> = [];
 
     // tr
@@ -44,6 +44,7 @@ export class AppComponent {
 
       start_row = i + 1;
       end_row = start_row;
+      console.log(`tr start_row=${start_row} , end_row=${end_row}`);
 
       if (table_arr[i] === undefined) {
         table_arr.push([]);
@@ -61,13 +62,14 @@ export class AppComponent {
       // th, td
       for (let j = 0; j < row.cells.length; j++) {
         // console.log(`for start_cell=${start_cell}`);
+        end_row = start_row;
 
         const cell = row.cells[j];
         let cell_index: number = j;
         let text: string | number | Date = cell.innerText;
 
 
-        // 合併儲存格
+
 
 
         if (table_arr[i][j] === undefined) {
@@ -87,19 +89,9 @@ export class AppComponent {
           // 此欄已經有值，就往後找
           for (let k = j; k > -1; k++) {
 
-
-            if (i >= 8) {
-
-              console.log(`table_arr[i=${i}][k + 1=${k}+1] = ${table_arr[i][k + 1]}`);
-            }
-
-
             // 開始欄
             if (table_arr[i][k + 1] === undefined) {
 
-              if (i >= 8) {
-                console.log(`[i=${i}][k + 1=${k}+1] , [k + 1] === undefined`);
-              }
               table_arr[i][k + 1] = k + 1;
               cell_index = k + 1;
               start_cell = cell_index + 1;
@@ -150,11 +142,14 @@ export class AppComponent {
         if (cell.colSpan > 1) {
 
 
-          const target_call = j + cell.colSpan - 1;
-          // console.log(`target_call=${target_call}`);
+          // const target_call = j + cell.colSpan - 1;
+          const target_call = start_cell - 1 + cell.colSpan - 1;
+          console.log(`target_call=${target_call}`);
 
-          for (let k = j + 1; k <= target_call; k++) {
+          for (let k = start_cell; k <= target_call; k++) {
             table_arr[i][k] = -1;
+
+            console.log(`text=${text} , i=${i} , k=${k}`);
 
 
             if (cell.rowSpan > 1) {
@@ -200,11 +195,13 @@ export class AppComponent {
         }
 
         if (cell.rowSpan > 1) {
-          end_row += cell.rowSpan - 1;
+          console.log(`cell.rowSpan=${cell.rowSpan} , start_row=${start_row} , end_row=${end_row}`);
+          end_row = end_row + cell.rowSpan - 1;
         }
 
+        // 合併儲存格
         if (cell.colSpan > 1 || cell.rowSpan > 1) {
-          // console.log(`start_row=${start_row}, start_cell=${start_cell}, end_row=${end_row}, end_cell=${end_cell}`);
+          console.log(`start_row=${start_row}, start_cell=${start_cell}, end_row=${end_row}, end_cell=${end_cell}`);
           worksheet.mergeCells(start_row, start_cell, end_row, end_cell);
         }
 
