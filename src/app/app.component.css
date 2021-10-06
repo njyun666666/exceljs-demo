@@ -11,3 +11,6 @@ td {
 th {
     background-color: #eee;
 }
+.border-red {
+    border-color: red;
+}

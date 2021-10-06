@@ -234,9 +234,7 @@ export class AppComponent {
 
 
         // style
-        // console.log(getComputedStyle(cell).backgroundColor, this.rgbaString2Hexargb(getComputedStyle(cell).backgroundColor));
-        // console.log(cell, cell.style);
-        // console.log(cell.style.backgroundColor.toString());
+        // backround color
         let fbColor: string = this.rgbaString2Hexargb(getComputedStyle(cell).backgroundColor);
         fbColor = fbColor.length === 0 ? 'ffffff' : fbColor;
 
@@ -246,6 +244,16 @@ export class AppComponent {
           fgColor: { argb: `${fbColor}` },
           bgColor: { argb: `ffffffff` }
         };
+
+
+        // border 
+        worksheet.getCell(start_row, start_cell).border = {
+          top: { style: 'thin', color: { argb: this.rgbaString2Hexargb(getComputedStyle(cell).borderTopColor) } },
+          left: { style: 'thin', color: { argb: this.rgbaString2Hexargb(getComputedStyle(cell).borderLeftColor) } },
+          bottom: { style: 'thin', color: { argb: this.rgbaString2Hexargb(getComputedStyle(cell).borderBottomColor) } },
+          right: { style: 'thin', color: { argb: this.rgbaString2Hexargb(getComputedStyle(cell).borderRightColor) } }
+        };
+
 
 
 
