@@ -65,16 +65,6 @@ export class AppComponent {
         const cell = row.cells[j];
         let cell_index: number = j;
         let text: string | number | Date = cell.innerText;
-        // console.log(cell, getComputedStyle(cell).backgroundColor);
-        // console.log(cell, cell.style);
-        // console.log(cell.style.backgroundColor.toString());
-
-
-        // if (table_arr[i][j] === undefined) {
-        //   table_arr[i].push(1);
-        // } else {
-
-        // }
 
 
         // 合併儲存格
@@ -97,13 +87,21 @@ export class AppComponent {
           // 此欄已經有值，就往後找
           for (let k = j; k > -1; k++) {
 
-            // console.log(`table_arr[i][j + 1] = ${table_arr[i][j + 1]}`);
+
+            if (i >= 8) {
+
+              console.log(`table_arr[i=${i}][k + 1=${k}+1] = ${table_arr[i][k + 1]}`);
+            }
+
 
             // 開始欄
-            if (table_arr[i][j + 1] === undefined) {
-              // console.log(`[j + 1]`);
-              table_arr[i][j + 1] = j + 1;
-              cell_index = j + 1;
+            if (table_arr[i][k + 1] === undefined) {
+
+              if (i >= 8) {
+                console.log(`[i=${i}][k + 1=${k}+1] , [k + 1] === undefined`);
+              }
+              table_arr[i][k + 1] = k + 1;
+              cell_index = k + 1;
               start_cell = cell_index + 1;
               end_cell = start_cell;
               break;
@@ -115,72 +113,9 @@ export class AppComponent {
 
 
 
-          // const now_length = table_arr[i].length;
-
-          // for (let k = j; k < now_length; k++) {
-
-          //   // console.log(`i=${i} , k=${k}`);
-
-          //   if (table_arr[i][k] === -1) {
-
-          //     start_cell++;
-          //     end_cell = start_cell;
-          //     // console.log(`now_length=${now_length} , table_arr[i=${i}][k=${k}] ,start_cell=${start_cell}`);
-          //   }
-
-          // }
-
-
-
-
-
         }
 
 
-
-
-
-
-
-        // //                               0  
-        // const target_cell = table_arr[i].length - 1 + cell.colSpan;
-        // const now_length = table_arr[i].length;
-
-        // // console.log(table_arr);
-        // for (let k = j; k <= target_cell; k++) {
-
-        //   // console.log(`i=${i} , k=${k} , table_arr[i][k]=${table_arr[i][k]}`);
-        //   // console.log(`i=${i} , k=${k} , table_arr[i][k]=${table_arr[i][k]}`);
-
-        //   if (table_arr[i][k] === undefined) {
-        //     // console.log(`i=${i} , k=${k} , table_arr[i][k]=${table_arr[i][k]}`);
-        //     // table_arr.push([]);
-        //     table_arr[i][k] = k;
-
-        //     if (i === 7) {
-        //       console.log(`i=${i}  , k=${k}`);
-        //     }
-
-        //   }
-
-
-        // }
-
-
-        // for (let k = j; k < now_length; k++) {
-
-        //   // console.log(`i=${i} , k=${k}`);
-
-        //   if (table_arr[i][k] === -1) {
-
-        //     start_cell++;
-        //     end_cell = start_cell;
-        //     console.log(`now_length=${now_length} , table_arr[i=${i}][k=${k}] ,start_cell=${start_cell}`);
-        //   }
-
-        // }
-
-        // console.log(`i=${i} , j=${j} , start_cell=${start_cell}`);
 
 
 
@@ -225,16 +160,16 @@ export class AppComponent {
             if (cell.rowSpan > 1) {
 
               const target_row = i + cell.rowSpan - 1;
-              console.log(`cell.rowSpan=${cell.rowSpan} , target_row=${target_row}`);
+              // console.log(`cell.rowSpan=${cell.rowSpan} , target_row=${target_row}`);
 
               for (let l = i + 1; l <= target_row; l++) {
 
-                
+
                 if (table_arr[l][k] === undefined) {
-                  console.log(`l=${l} , k=${k}`);
-                  
+                  // console.log(`l=${l} , k=${k}`);
+
                   // table_arr.push([]);
-                  // table_arr[l][k] = -1;
+                  table_arr[l][k] = -1;
                   // console.log(`[${k}][${start_cell - 1}] , k=${k} , start_cell=${start_cell - 1}`);
                 }
 
@@ -351,12 +286,12 @@ export class AppComponent {
     worksheet.getColumn(2).numFmt = '#,##0.00;[Red]\-#,##0.00';
 
 
-    // workbook.xlsx.writeBuffer().then((buffer) => {
-    //   const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-    //   const fileExtension = '.xlsx';
-    //   const blob = new Blob([buffer], { type: fileType });
-    //   saveAs(blob, 'exceljs' + fileExtension);
-    // });
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const fileExtension = '.xlsx';
+      const blob = new Blob([buffer], { type: fileType });
+      saveAs(blob, 'exceljs' + fileExtension);
+    });
 
 
   }
