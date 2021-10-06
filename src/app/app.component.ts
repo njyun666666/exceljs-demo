@@ -29,7 +29,7 @@ export class AppComponent {
 
   excel(table: HTMLTableElement) {
 
-    console.log(table);
+    // console.log(table);
     // const table = tableDOM.nativeElement as HTMLTableElement;
 
     const workbook = new Excel.Workbook();
@@ -221,12 +221,7 @@ export class AppComponent {
           text = Number(text.replace(/,/g, ''));
 
         }
-
-
-        // console.log(text, cell.colSpan);
-
-        // console.log(rowID, cellID);
-
+        
 
         worksheet.getCell(start_row, start_cell).value = text;
 
@@ -256,8 +251,6 @@ export class AppComponent {
 
 
         // font
-        console.log(getComputedStyle(cell).font);
-
         worksheet.getCell(start_row, start_cell).font = {
           // name: ,
           color: { argb: this.rgbaString2Hexargb(getComputedStyle(cell).color) },
@@ -268,6 +261,8 @@ export class AppComponent {
 
 
 
+
+
         // 設定下一個開始欄位
         end_cell++;
         start_cell = end_cell;
@@ -275,18 +270,11 @@ export class AppComponent {
         // rowValues[j] = text;
       }
 
-      // if (i === 0) {
-      //   worksheet.columns = columns;
-      // }
-
-      // worksheet.addRow(rowValues);
-
-
       // console.log(table_arr);
     }
 
 
-    console.log(table_arr);
+    // console.log(table_arr);
 
     // A
     // worksheet.getColumn(1).fill = {
